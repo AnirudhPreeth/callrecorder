@@ -2,7 +2,43 @@ import 'package:callrecorder/main.dart';
 import 'package:callrecorder/recorder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:callrecorder/methodchannel.dart';
+import 'package:flutter/services.dart';
+import 'package:callrecorder/android/call_recorder_channel.dart';
+
+const number = '+918618764563';
+
+void startCallRecording() async {
+  try {
+    final platform = MethodChannel('call_recorder_channel');
+    await platform.invokeMethod('startCallRecording');
+    print('Call recording started');
+  } catch (e) {
+    print('Failed to start call recording: $e');
+  }
+}
+
+void stopCallRecording() async {
+  try {
+    final platform = MethodChannel('call_recorder_channel');
+    await platform.invokeMethod('stopCallRecording');
+    print('Call recording stopped');
+  } catch (e) {
+    print('Failed to stop call recording: $e');
+  }
+}
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: HomePage(),
+    );
+  }
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,7 +48,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const number = '+918618764563';
+  final CallRecorder callRecorder = CallRecorder();
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +63,16 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () async {
                 FlutterPhoneDirectCaller.callNumber(number);
-                //launchUrl('tel://$number' as Uri);
+                CallRecorder.startRecording();
               },
-              child: const Text("Call"),
+              child: const Text("Call & Start Recording"),
             ),
             const SizedBox(width: 20), // Add spacing between buttons
             ElevatedButton(
               onPressed: () {
-                // Handle the second button press
+                CallRecorder.stopRecording();
               },
-              child: const Text("Voice Recording"),
+              child: const Text("Stop Recording"),
             ),
           ],
         ),
@@ -106,12 +142,12 @@ class _MainPageState extends State<MainPage> {
   recorder() {}
 }
 
-void main() {
-  runApp(const MyApp());
+void demo() {
+  runApp(const MyAppy());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyAppy extends StatelessWidget {
+  const MyAppy({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
