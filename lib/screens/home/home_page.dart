@@ -1,5 +1,3 @@
-import 'package:callrecorder/main.dart';
-import 'package:callrecorder/recorder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +7,7 @@ const number = '+918618764563';
 
 void startCallRecording() async {
   try {
-    final platform = MethodChannel('call_recorder_channel');
+    const platform = MethodChannel('call_recorder_channel');
     await platform.invokeMethod('startCallRecording');
     print('Call recording started');
   } catch (e) {
@@ -19,7 +17,7 @@ void startCallRecording() async {
 
 void stopCallRecording() async {
   try {
-    final platform = MethodChannel('call_recorder_channel');
+    const platform = MethodChannel('call_recorder_channel');
     await platform.invokeMethod('stopCallRecording');
     print('Call recording stopped');
   } catch (e) {
@@ -28,10 +26,12 @@ void stopCallRecording() async {
 }
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -112,17 +112,15 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget buildStart() {
-    final isRecording = false; // Replace with your recording logic
-    final icon = isRecording ? Icons.stop : Icons.mic;
-    final text = isRecording ? "Stop" : "Start";
-    final primary = isRecording ? Colors.red : Colors.white;
-    final onPrimary = isRecording ? Colors.white : Colors.black;
+    const isRecording = false; // Replace with your recording logic
+    const icon = isRecording ? Icons.stop : Icons.mic;
+    const text = isRecording ? "Stop" : "Start";
+    const primary = isRecording ? Colors.red : Colors.white;
+    const onPrimary = isRecording ? Colors.white : Colors.black;
 
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        minimumSize: const Size(175, 50),
-        primary: Colors.red,
-        onPrimary: Colors.black,
+        foregroundColor: Colors.black, backgroundColor: Colors.red, minimumSize: const Size(175, 50),
       ),
       icon: const Icon(Icons.mic),
       label: const Text(

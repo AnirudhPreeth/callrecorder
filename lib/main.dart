@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:callrecorder/screens/home/home_page.dart';
 
 void main() {
+
+  /*//FireBase Initialization
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);*/
   runApp(const MyApp());
 }
 

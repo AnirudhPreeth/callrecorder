@@ -74,3 +74,4 @@ class _PermissionStatusState extends State<PermissionStatusWidget> {
     );
   }
 }
+
