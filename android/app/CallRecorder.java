@@ -6,7 +6,7 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import java.io.File;
 import java.io.IOException;
-import com.example.myapp.CallRecorderMethodCallHandler
+import com.jetbrains.CallRecorderMethodCallHandler
 
 public class MainActivity extends FlutterActivity {
     private static final String CALL_RECORDER_CHANNEL = "call_recorder_channel";
