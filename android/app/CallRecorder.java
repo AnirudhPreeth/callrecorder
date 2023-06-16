@@ -6,11 +6,42 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import java.io.File;
 import java.io.IOException;
-import com.jetbrains.CallRecorderMethodCallHandler
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.telephony.TelephonyManager;
 
 public class MainActivity extends FlutterActivity {
     private static final String CALL_RECORDER_CHANNEL = "call_recorder_channel";
+    private static final String ACTION_OUTGOING_CALL_STARTED = "android.intent.action.NEW_OUTGOING_CALL";
+    private static final String ACTION_INCOMING_CALL_STARTED = "android.intent.action.PHONE_STATE";
+    private static final String EXTRA_PHONE_NUMBER = "android.intent.extra.PHONE_NUMBER";
+    private static final String STATE_IDLE = "IDLE";
+    private static final String STATE_OFFHOOK = "OFFHOOK";
+    private static final String STATE_RINGING = "RINGING";
     private MediaRecorder recorder;
+    private boolean isRecording = false;
+
+    private BroadcastReceiver callReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (action.equals(ACTION_OUTGOING_CALL_STARTED)) {
+                String phoneNumber = intent.getStringExtra(EXTRA_PHONE_NUMBER);
+                startCallRecording();
+            } else if (action.equals(ACTION_INCOMING_CALL_STARTED)) {
+                String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+                if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+                    // Incoming call started
+                    startCallRecording();
+                } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
+                    // Call answered
+                    startCallRecording();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,41 +63,58 @@ public class MainActivity extends FlutterActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(callReceiver, new IntentFilter(ACTION_OUTGOING_CALL_STARTED));
+        registerReceiver(callReceiver, new IntentFilter(ACTION_INCOMING_CALL_STARTED));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(callReceiver);
+    }
+
     private void startCallRecording() {
-        recorder = new MediaRecorder();
+        if (!isRecording) {
+            recorder = new MediaRecorder();
+            // Set the audio source
+            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
 
-        // Set the audio source
-        recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+            // Set the output format
+            recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
-        // Set the output format
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            // Set the output file path
+            File outputDir = new File(Environment.getExternalStorageDirectory(), "Call Recording");
+            if (!outputDir.exists()) {
+                outputDir.mkdirs();
+            }
+            String outputPath = outputDir.getAbsolutePath() + File.separator + "call_recording.mp4";
+            recorder.setOutputFile(outputPath);
 
-        // Set the output file path
-        File outputDir = new File(Environment.getExternalStorageDirectory(), "Call Recording");
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
+            // Set the audio encoder
+            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+
+            // Prepare the Media
+            // Prepare the MediaRecorder
+            try {
+                recorder.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Start recording
+            recorder.start();
+            isRecording = true;
         }
-        String outputPath = outputDir.getAbsolutePath() + File.separator + "call_recording.mp4";
-        recorder.setOutputFile(outputPath);
-
-        // Set the audio encoder
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-
-        // Prepare the MediaRecorder
-        try {
-            recorder.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Start recording
-        recorder.start();
     }
 
     private void stopCallRecording() {
-        if (recorder != null) {
+        if (isRecording) {
             // Stop recording
             recorder.stop();
+            isRecording = false;
 
             // Release resources
             recorder.release();
