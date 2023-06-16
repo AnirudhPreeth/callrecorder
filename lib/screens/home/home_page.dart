@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter/services.dart';
-import 'package:callrecorder/android/call_recorder_channel.dart';
 
 const number = '+918618764563';
 
-void startCallRecording() async {
-  try {
-    const platform = MethodChannel('call_recorder_channel');
-    await platform.invokeMethod('startCallRecording');
-    print('Call recording started');
-  } catch (e) {
-    print('Failed to start call recording: $e');
+const MethodChannel _callRecorderChannel = MethodChannel('call_recorder_channel');
+
+class CallRecorder {
+  static Future<void> startRecording() async {
+    try {
+      await _callRecorderChannel.invokeMethod('startCallRecording');
+      print('Call recording started');
+    } catch (e) {
+      print('Failed to start call recording: $e');
+    }
+  }
+
+  static Future<void> stopRecording() async {
+    try {
+      await _callRecorderChannel.invokeMethod('stopCallRecording');
+      print('Call recording stopped');
+    } catch (e) {
+      print('Failed to stop call recording: $e');
+    }
   }
 }
 
@@ -43,7 +54,7 @@ class HomePage extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () async {
             FlutterPhoneDirectCaller.callNumber(number);
-            startCallRecording();
+            CallRecorder.startRecording();
           },
           child: const Text("Call & Start Recording"),
         ),
