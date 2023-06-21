@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 
 const number = '+918618764563';
 
 const MethodChannel _callRecorderChannel = MethodChannel('call_recorder_channel');
 
 class CallRecorder {
-  static Future<void> startRecording() async {
+  static Future<bool> startRecording() async {
     try {
       await _callRecorderChannel.invokeMethod('startCallRecording');
       print('Call recording started');
-    } catch (e) {
-      print('Failed to start call recording: $e');
+      return true; // Recording started successfully
+    } catch (e, stackTrace) {
+      print('Failed to start call recording: $e\n$stackTrace');
+      return false; // Recording failed to start
     }
   }
 
-  static Future<void> stopRecording() async {
+  static Future<bool> stopRecording() async {
     try {
       await _callRecorderChannel.invokeMethod('stopCallRecording');
       print('Call recording stopped');
-    } catch (e) {
-      print('Failed to stop call recording: $e');
+      return true; // Recording stopped successfully
+    } catch (e, stackTrace) {
+      print('Failed to stop call recording: $e\n$stackTrace');
+      return false; // Recording failed to stop
     }
   }
 }

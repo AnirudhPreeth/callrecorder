@@ -11,7 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
 
-public class MainActivity extends FlutterActivity {
+public class CallRecorder extends FlutterActivity {
     private static final String CALL_RECORDER_CHANNEL = "call_recorder_channel";
     private static final String ACTION_OUTGOING_CALL_STARTED = "android.intent.action.NEW_OUTGOING_CALL";
     private static final String ACTION_INCOMING_CALL_STARTED = "android.intent.action.PHONE_STATE";
