@@ -79,8 +79,13 @@ public class MainActivity extends FlutterActivity {
     private void startCallRecording() {
         if (!isRecording) {
             recorder = new MediaRecorder();
-            // Set the audio source
-            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+
+            // Set the audio source to VOICE_CALL if available, otherwise use MIC
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && MediaRecorder.AudioSource.VOICE_CALL != MediaRecorder.AudioSource.DEFAULT) {
+                recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+            } else {
+                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            }
 
             // Set the output format
             recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
@@ -96,7 +101,6 @@ public class MainActivity extends FlutterActivity {
             // Set the audio encoder
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
-            // Prepare the Media
             // Prepare the MediaRecorder
             try {
                 recorder.prepare();
