@@ -169,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.8"
+  enum_to_string:
+    dependency: transitive
+    description:
+      name: enum_to_string
+      sha256: bd9e83a33b754cb43a75b36a9af2a0b92a757bfd9847d2621ca0b1bed45f8e7a
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -254,6 +262,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_audio_recorder2:
+    dependency: "direct main"
+    description:
+      name: flutter_audio_recorder2
+      sha256: "4332d37ede248874b5fa1bde8ae23c887c99c279740bf3111015e9714ea1041c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   flutter_easyloading:
     dependency: "direct main"
     description:
@@ -705,6 +721,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.0"
+  phone_state:
+    dependency: "direct main"
+    description:
+      name: phone_state
+      sha256: "8938b63a00f3e70a880f3f9e046290c1da6c39252be5e83881ada7d691552b2a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   platform:
     dependency: transitive
     description:

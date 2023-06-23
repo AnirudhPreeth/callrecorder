@@ -10,6 +10,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.media.MediaRecorder;
+import android.os.Environment;
+import android.telephony.PhoneStateListener;
 
 public class CallRecorder extends FlutterActivity {
     private static final String CALL_RECORDER_CHANNEL = "call_recorder_channel";
