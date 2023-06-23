@@ -31,6 +31,8 @@ class CallRecorder {
 }
 
 void main() {
+  CallStatePlugin.initialize(); // Initialize the CallStatePlugin
+
   runApp(const MyApp());
 }
 
@@ -64,5 +66,35 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CallStatePlugin {
+  static const MethodChannel _channel = MethodChannel('call_state_plugin');
+
+  static void initialize() {
+    _channel.setMethodCallHandler((call) async {
+      if (call.method == 'onCallStateChanged') {
+        final String callState = call.arguments['callState'];
+        _handleCallStateChange(callState);
+      }
+    });
+  }
+}
+
+void _handleCallStateChange(String callState) {
+  switch (callState) {
+    case 'IDLE':
+      print('Call is idle');
+      break;
+    case 'OFFHOOK':
+      print('Call is off-hook');
+      break;
+    case 'RINGING':
+      print('Call is ringing');
+      break;
+    default:
+      print('Unknown call state: $callState');
+      break;
   }
 }
