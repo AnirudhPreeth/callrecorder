@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter/services.dart';
 
-const number = '+918618764563';
+const number = '+919731303664';
 
 const MethodChannel _callRecorderChannel = MethodChannel('call_recorder_channel');
 
